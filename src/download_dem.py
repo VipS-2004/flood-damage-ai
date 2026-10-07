@@ -15,7 +15,12 @@ TOKEN_URL = (
 PROCESS_URL = "https://sh.dataspace.copernicus.eu/process/v1"
 
 # Same technical test AOI as Sentinel-1
-BBOX = [85.50, 27.80, 86.20, 28.30]
+BBOX = [
+    85.28,
+    28.10,
+    85.60,
+    28.34
+]
 
 
 def get_token():

@@ -1,0 +1,85 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600&display=swap");
+
+@import "tailwindcss";
+
+:root {
+  --paper: #fdf9f0;
+  --paper-soft: #f7f3ea;
+  --paper-recessed: #efece4;
+
+  --ink: #1a1a1a;
+  --ink-primary: #2c2c2c;
+  --ink-secondary: #4a4a4a;
+  --ink-muted: #717171;
+
+  --line: #d8d5cc;
+  --line-soft: #e2dfd7;
+
+  --radar-blue: #2c5282;
+  --radar-blue-soft: #3182ce;
+
+  --terrain-green: #385e42;
+  --terrain-green-soft: #4a7c59;
+
+  --alert-rust: #c05621;
+  --alert-rust-soft: #dd6b20;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Inter", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+::selection {
+  background: #e5e2d9;
+  color: var(--ink);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--paper);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--line);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ink-muted);
+}
+
+.font-newsreader {
+  font-family: "Newsreader", Georgia, serif;
+}
+
+.font-mono {
+  font-family: "JetBrains Mono", monospace;
+}

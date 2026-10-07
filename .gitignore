@@ -1,3 +1,8 @@
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
 # Python
 __pycache__/
 *.py[cod]
@@ -19,3 +24,16 @@ outputs/*
 # OS
 .DS_Store
 Thumbs.db
+# Frontend dependencies and build output
+frontend/node_modules/
+frontend/dist/
+
+# External model repository
+KuroSiwo/
+
+# Processed raster data
+data/processed/*.tif
+data/processed/*.tiff
+
+# Generated road network graphs
+data/processed/osm_20260727/*.graphml

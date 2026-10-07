@@ -1,7 +1,8 @@
 import rasterio
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.colors import ListedColormap
+
+from scipy import ndimage
 
 
 
@@ -11,29 +12,27 @@ from matplotlib.colors import ListedColormap
 before_file = "data/raw/sentinel1_20260816_VV.tif"
 after_file  = "data/raw/sentinel1_20260828_VV.tif"
 
-output = "outputs/nepal_flood_sar_analysis.png"
+output = "outputs/nepal_flood_cleaned_mask.png"
 
 
 
-# READ SENTINEL-1 DATA
+# READ DATA
 
 
 with rasterio.open(before_file) as src:
+
     before = src.read(1).astype(np.float32)
 
+    # Pixel dimensions
+    pixel_width = abs(src.transform.a)
+    pixel_height = abs(src.transform.e)
+
+    crs = src.crs
+
+
 with rasterio.open(after_file) as src:
+
     after = src.read(1).astype(np.float32)
-
-
-
-# CHECK THAT IMAGES MATCH
-
-
-if before.shape != after.shape:
-    raise ValueError(
-        f"Image dimensions do not match: "
-        f"Before={before.shape}, After={after.shape}"
-    )
 
 
 
@@ -64,20 +63,13 @@ valid = (
 
 
 
-# VV CHANGE
-#
-# Positive = backscatter decreased after event
-#
-# Example:
-# Before = -8 dB
-# After  = -13 dB
-#
-# Change = -8 - (-13) = +5 dB
-#
-# Large positive values can indicate inundation.
+# SAR CHANGE
 
 
-change_db = np.full_like(before_db, np.nan)
+change_db = np.full_like(
+    before_db,
+    np.nan
+)
 
 change_db[valid] = (
     before_db[valid] - after_db[valid]
@@ -85,195 +77,213 @@ change_db[valid] = (
 
 
 
-# FLOOD CANDIDATE THRESHOLD
+# INITIAL FLOOD THRESHOLD
 
 
-threshold = 3.0   # dB
+threshold = 3.0
 
-flood_mask = (
+flood_candidate = (
     valid &
     (change_db >= threshold)
 )
 
 
 
-# COMMON DISPLAY SCALE FOR BEFORE / AFTER
+# REMOVE SMALL ISOLATED REGIONS
 
 
-valid_before = before_db[np.isfinite(before_db)]
-valid_after = after_db[np.isfinite(after_db)]
-
-sar_values = np.concatenate([
-    valid_before,
-    valid_after
-])
-
-sar_vmin = np.percentile(sar_values, 2)
-sar_vmax = np.percentile(sar_values, 98)
+# 8-connected neighborhood
+structure = np.ones((3, 3), dtype=np.uint8)
 
 
-
-# CHANGE MAP SCALE
-
-
-valid_change = change_db[np.isfinite(change_db)]
-
-change_limit = np.percentile(
-    np.abs(valid_change),
-    98
+labeled, num_features = ndimage.label(
+    flood_candidate,
+    structure=structure
 )
 
 
 
-# FIGURE
+# REMOVE SMALL COMPONENTS
+
+
+# Minimum connected component size
+# Adjust depending on image resolution.
+
+min_pixels = 50
+
+
+component_sizes = np.bincount(
+    labeled.ravel()
+)
+
+
+clean_mask = np.zeros_like(
+    flood_candidate,
+    dtype=bool
+)
+
+
+for component_id in range(
+    1,
+    len(component_sizes)
+):
+
+    size = component_sizes[component_id]
+
+    if size >= min_pixels:
+
+        clean_mask[
+            labeled == component_id
+        ] = True
+
+
+
+# OPTIONAL MORPHOLOGICAL CLEANING
+
+
+# Remove tiny holes / smooth mask
+
+clean_mask = ndimage.binary_opening(
+    clean_mask,
+    structure=structure
+)
+
+clean_mask = ndimage.binary_closing(
+    clean_mask,
+    structure=structure
+)
+
+
+
+# FLOODED AREA
+
+
+pixel_area_m2 = (
+    pixel_width *
+    pixel_height
+)
+
+flood_pixels = np.sum(clean_mask)
+
+flood_area_m2 = (
+    flood_pixels *
+    pixel_area_m2
+)
+
+flood_area_hectares = (
+    flood_area_m2 / 10_000
+)
+
+flood_area_km2 = (
+    flood_area_m2 / 1_000_000
+)
+
+
+
+# PRINT RESULTS
+
+
+print()
+print("=" * 55)
+print("NEPAL FLOOD SAR ANALYSIS")
+print("=" * 55)
+
+print(f"CRS: {crs}")
+
+print(
+    f"Pixel size: "
+    f"{pixel_width:.2f} m × "
+    f"{pixel_height:.2f} m"
+)
+
+print(
+    f"Pixel area: "
+    f"{pixel_area_m2:.2f} m²"
+)
+
+print(
+    f"Threshold: "
+    f"{threshold:.1f} dB"
+)
+
+print(
+    f"Minimum component: "
+    f"{min_pixels} pixels"
+)
+
+print(
+    f"Flood pixels: "
+    f"{flood_pixels:,}"
+)
+
+print(
+    f"Flooded area: "
+    f"{flood_area_m2:,.2f} m²"
+)
+
+print(
+    f"Flooded area: "
+    f"{flood_area_hectares:,.2f} hectares"
+)
+
+print(
+    f"Flooded area: "
+    f"{flood_area_km2:,.4f} km²"
+)
+
+print("=" * 55)
+
+
+
+# DISPLAY MASK
 
 
 fig, axes = plt.subplots(
+    1,
     2,
-    2,
-    figsize=(14, 10),
+    figsize=(13, 6),
     constrained_layout=True
 )
 
 
+# ------------------------------------------------------------
+# Raw candidate
+# ------------------------------------------------------------
 
-# 1. BEFORE
-
-
-im1 = axes[0, 0].imshow(
-    before_db,
-    cmap="gray",
-    vmin=sar_vmin,
-    vmax=sar_vmax
+axes[0].imshow(
+    flood_candidate,
+    cmap="Blues"
 )
 
-axes[0, 0].set_title(
-    "Before VV\n16 Aug 2026",
-    fontsize=15,
+axes[0].set_title(
+    "Raw Flood Candidate Mask\n"
+    f"VV decrease ≥ {threshold:.1f} dB",
+    fontsize=14,
     fontweight="bold"
 )
 
-axes[0, 0].set_xticks([])
-axes[0, 0].set_yticks([])
+axes[0].set_xticks([])
+axes[0].set_yticks([])
 
-cbar1 = fig.colorbar(
-    im1,
-    ax=axes[0, 0],
-    fraction=0.046,
-    pad=0.03
+
+# ------------------------------------------------------------
+# Clean mask
+# ------------------------------------------------------------
+
+axes[1].imshow(
+    clean_mask,
+    cmap="Blues"
 )
 
-cbar1.set_label(
-    "VV Backscatter (dB)",
-    fontsize=10
-)
-
-
-
-# 2. AFTER
-
-
-im2 = axes[0, 1].imshow(
-    after_db,
-    cmap="gray",
-    vmin=sar_vmin,
-    vmax=sar_vmax
-)
-
-axes[0, 1].set_title(
-    "After VV\n28 Aug 2026",
-    fontsize=15,
+axes[1].set_title(
+    "Cleaned Flood Mask\n"
+    f"Minimum region = {min_pixels} pixels",
+    fontsize=14,
     fontweight="bold"
 )
 
-axes[0, 1].set_xticks([])
-axes[0, 1].set_yticks([])
-
-cbar2 = fig.colorbar(
-    im2,
-    ax=axes[0, 1],
-    fraction=0.046,
-    pad=0.03
-)
-
-cbar2.set_label(
-    "VV Backscatter (dB)",
-    fontsize=10
-)
-
-
-
-# 3. SAR CHANGE MAP
-
-
-im3 = axes[1, 0].imshow(
-    change_db,
-    cmap="RdBu_r",
-    vmin=-change_limit,
-    vmax=change_limit
-)
-
-axes[1, 0].set_title(
-    "VV Backscatter Change\nBefore − After",
-    fontsize=15,
-    fontweight="bold"
-)
-
-axes[1, 0].set_xticks([])
-axes[1, 0].set_yticks([])
-
-cbar3 = fig.colorbar(
-    im3,
-    ax=axes[1, 0],
-    fraction=0.046,
-    pad=0.03
-)
-
-cbar3.set_label(
-    "Change (dB)",
-    fontsize=10
-)
-
-
-
-# 4. FLOOD CANDIDATE MASK
-
-
-# Create display image
-mask_display = np.where(
-    flood_mask,
-    1,
-    np.nan
-)
-
-im4 = axes[1, 1].imshow(
-    mask_display,
-    cmap="Blues",
-    vmin=0,
-    vmax=1
-)
-
-axes[1, 1].set_title(
-    f"Flood Candidate Mask\nVV decrease ≥ {threshold:.1f} dB",
-    fontsize=15,
-    fontweight="bold"
-)
-
-axes[1, 1].set_xticks([])
-axes[1, 1].set_yticks([])
-
-cbar4 = fig.colorbar(
-    im4,
-    ax=axes[1, 1],
-    fraction=0.046,
-    pad=0.03
-)
-
-cbar4.set_ticks([0, 1])
-cbar4.set_ticklabels([
-    "No change",
-    "Potential flood"
-])
+axes[1].set_xticks([])
+axes[1].set_yticks([])
 
 
 
@@ -281,8 +291,8 @@ cbar4.set_ticklabels([
 
 
 fig.suptitle(
-    "Sentinel-1 SAR Flood Change Analysis | Nepal",
-    fontsize=20,
+    "Sentinel-1 Flood Mask Refinement | Nepal",
+    fontsize=19,
     fontweight="bold"
 )
 
@@ -301,8 +311,3 @@ plt.show()
 
 print()
 print("Saved:", output)
-print(f"Flood threshold: {threshold:.1f} dB")
-print(
-    "Potential flood pixels:",
-    np.sum(flood_mask)
-)

@@ -2,13 +2,10 @@ import os
 import requests
 from dotenv import load_dotenv
 
-
 load_dotenv()
-
 
 CLIENT_ID = os.getenv("COPERNICUS_CLIENT_ID")
 CLIENT_SECRET = os.getenv("COPERNICUS_CLIENT_SECRET")
-
 
 TOKEN_URL = (
     "https://identity.dataspace.copernicus.eu/"
@@ -17,7 +14,6 @@ TOKEN_URL = (
 
 PROCESS_URL = "https://sh.dataspace.copernicus.eu/process/v1"
 
-
 BBOX = [
     85.28,
     28.10,
@@ -25,11 +21,15 @@ BBOX = [
     28.34
 ]
 
-
 OUTPUT_DIR = "data/raw"
 
 
 def get_token():
+    if not CLIENT_ID or not CLIENT_SECRET:
+        raise RuntimeError(
+            "COPERNICUS_CLIENT_ID or COPERNICUS_CLIENT_SECRET "
+            "is missing from .env"
+        )
 
     response = requests.post(
         TOKEN_URL,
@@ -46,12 +46,7 @@ def get_token():
     return response.json()["access_token"]
 
 
-def download_scene(
-    token,
-    date,
-    band
-):
-
+def download_scene(token, date, band):
     start = f"{date}T00:00:00Z"
     end = f"{date}T23:59:59Z"
 
@@ -74,55 +69,39 @@ function evaluatePixel(sample) {{
 """
 
     payload = {
-
         "input": {
-
             "bounds": {
                 "bbox": BBOX
             },
-
             "data": [
-
                 {
                     "type": "sentinel-1-grd",
 
                     "dataFilter": {
-
                         "timeRange": {
                             "from": start,
                             "to": end
                         },
-
                         "orbitDirection": "ASCENDING",
-
                         "acquisitionMode": "IW",
-
                         "polarization": "DV"
-
                     },
 
                     "processing": {
-
                         "orthorectify": True,
-
-                        "demInstance": "COPERNICUS_30"
-
+                        "demInstance": "COPERNICUS_30",
+                        "backCoeff": "GAMMA0_TERRAIN"
                     }
                 }
             ]
         },
 
         "output": {
-
             "width": 1200,
-
             "height": 1000,
-
             "responses": [
-
                 {
                     "identifier": "default",
-
                     "format": {
                         "type": "image/tiff"
                     }
@@ -133,17 +112,13 @@ function evaluatePixel(sample) {{
         "evalscript": evalscript
     }
 
-
     headers = {
         "Authorization": f"Bearer {token}",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Accept": "image/tiff"
     }
 
-
-    print(
-        f"Downloading {date} {band}..."
-    )
-
+    print(f"Downloading {date} {band} with GAMMA0_TERRAIN...")
 
     response = requests.post(
         PROCESS_URL,
@@ -152,19 +127,17 @@ function evaluatePixel(sample) {{
         timeout=180
     )
 
+    print("HTTP status:", response.status_code)
 
-    print(
-        "HTTP status:",
-        response.status_code
-    )
-
+    if not response.ok:
+        print("Response:")
+        print(response.text)
 
     response.raise_for_status()
 
-
     filename = (
         f"sentinel1_{date.replace('-', '')}"
-        f"_{band}.tif"
+        f"_{band}_gamma0terrain.tif"
     )
 
     filepath = os.path.join(
@@ -172,66 +145,53 @@ function evaluatePixel(sample) {{
         filename
     )
 
-
     with open(filepath, "wb") as f:
         f.write(response.content)
 
-
-    print(
-        f"Saved: {filepath}"
-    )
-
-    print(
-        f"Size: {len(response.content) / 1024:.1f} KB"
-    )
-
+    print(f"Saved: {filepath}")
+    print(f"Size: {len(response.content) / 1024:.1f} KB")
     print()
 
 
-# ------------------------------------------------
-# MAIN
-# ------------------------------------------------
+def main():
+    os.makedirs(
+        OUTPUT_DIR,
+        exist_ok=True
+    )
 
-os.makedirs(
-    OUTPUT_DIR,
-    exist_ok=True
-)
+    print("Authenticating with Copernicus...")
 
+    token = get_token()
 
-print("Authenticating with Copernicus...")
+    print("Authentication successful.")
+    print()
 
-token = get_token()
+    download_scene(
+        token,
+        "2026-08-16",
+        "VV"
+    )
 
-print("Authentication successful.")
-print()
+    download_scene(
+        token,
+        "2026-08-16",
+        "VH"
+    )
 
+    download_scene(
+        token,
+        "2026-08-28",
+        "VV"
+    )
 
-# BEFORE
-download_scene(
-    token,
-    "2026-08-16",
-    "VV"
-)
+    download_scene(
+        token,
+        "2026-08-28",
+        "VH"
+    )
 
-download_scene(
-    token,
-    "2026-08-16",
-    "VH"
-)
-
-
-# AFTER
-download_scene(
-    token,
-    "2026-08-28",
-    "VV"
-)
-
-download_scene(
-    token,
-    "2026-08-28",
-    "VH"
-)
+    print("All terrain-corrected event scenes downloaded.")
 
 
-print("All event scenes downloaded.")
+if __name__ == "__main__":
+    main()
