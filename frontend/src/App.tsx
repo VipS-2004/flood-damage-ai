@@ -1,10 +1,10 @@
-﻿import { useState } from "react";
-import SegmentedEvidenceSwitcher from "./components/SegmentedEvidenceSwitcher";
-import MetricCard from "./components/MetricCard";
-import EvidenceLedgerTable from "./components/EvidenceLedgerTable";
+import { useEffect, useState } from "react";
+import SegmentedEvidenceSwitcher from "./components/ui/SegmentedEvidenceSwitcher";
+import MetricCard from "./components/ui/MetricCard";
+import EvidenceLedgerTable from "./components/ui/EvidenceLedgerTable";
+import GlobeScrollDemo from "./components/ui/landing-page";
 import {
   Crosshair,
-  ArrowUpRight,
   Layers3,
   Minus,
   Navigation,
@@ -36,99 +36,120 @@ const mapLabels: Record<MapMode, string> = {
 };
 
 
-const roadData = [
+const evidenceMetadata: Record<
+  MapMode,
   {
-    id: "248708067",
-    roadClass: "path",
-    total: "0.45 km",
-    overlap: "82.9 m",
-    percent: "18.44%",
+    title: string;
+    explanation: string;
+    source: string;
+    date: string;
+    classification: string;
+  }
+> = {
+  impact: {
+    title: "Composite impact / evidence view",
+    explanation:
+      "Composite visualization of the analytical evidence and contextual layers used in this report; it is not a confirmed damage map.",
+    source: "Sentinel-1 + Copernicus DEM + pre-event OSM",
+    date: "EVENT 28 AUG 2026 · OSM 27 JUL 2026",
+    classification: "Analytical evidence + contextual layers",
   },
-  {
-    id: "937405879",
-    roadClass: "unclassified",
-    total: "1.69 km",
-    overlap: "202.1 m",
-    percent: "11.97%",
+  sar: {
+    title: "Terrain-corrected SAR change",
+    explanation:
+      "Terrain-corrected Sentinel-1 surface-change visualization used as potential flood-related evidence.",
+    source: "Copernicus Sentinel-1 / gamma0terrain",
+    date: "16 AUG → 28 AUG 2026",
+    classification: "Analytical evidence",
   },
-  {
-    id: "1523551262",
-    roadClass: "path",
-    total: "0.31 km",
-    overlap: "27.0 m",
-    percent: "8.85%",
+  drainage: {
+    title: "DEM-derived drainage corridor",
+    explanation:
+      "Terrain-derived drainage structure used to contextualise where water may move and where assets are exposed.",
+    source: "Copernicus DEM GLO-30",
+    date: "100 M HYDROLOGIC CORRIDOR",
+    classification: "Contextual terrain layer",
   },
-  {
-    id: "904894051",
-    roadClass: "trunk",
-    total: "0.62 km",
-    overlap: "26.5 m",
-    percent: "4.31%",
+  beforeAfter: {
+    title: "Sentinel-1 before / after comparison",
+    explanation:
+      "Before-and-after Sentinel-1 comparison for the two acquisition dates; visual change is not a confirmed flood boundary.",
+    source: "Copernicus Sentinel-1",
+    date: "16 AUG 2026 → 28 AUG 2026",
+    classification: "Analytical evidence",
   },
-  {
-    id: "248705796",
-    roadClass: "primary",
-    total: "3.83 km",
-    overlap: "79.5 m",
-    percent: "2.08%",
-  },
-];
+};
 
 
-const settlementData = [
-  {
-    settlement: "Dhunche",
-    status: "NO_CHANGE",
-    baseline: "0.36 km",
-    scenario: "0.36 km",
-    delta: "0.00 km",
-  },
-  {
-    settlement: "Brabal",
-    status: "NO_CHANGE",
-    baseline: "0.49 km",
-    scenario: "0.49 km",
-    delta: "0.00 km",
-  },
-  {
-    settlement: "Gosaikunda",
-    status: "NO_CHANGE",
-    baseline: "0.52 km",
-    scenario: "0.52 km",
-    delta: "0.00 km",
-  },
-  {
-    settlement: "Sano Bharkhu",
-    status: "NO_CHANGE",
-    baseline: "3.21 km",
-    scenario: "3.21 km",
-    delta: "0.00 km",
-  },
-  {
-    settlement: "Thulo SyÄbru",
-    status: "NO_CHANGE",
-    baseline: "3.86 km",
-    scenario: "3.86 km",
-    delta: "0.00 km",
-  },
-  {
-    settlement: "Dursagang",
-    status: "NO_CHANGE",
-    baseline: "5.40 km",
-    scenario: "5.40 km",
-    delta: "0.00 km",
-  },
-  {
-    settlement: "Syabru Bensi",
-    status: "NO_CHANGE",
-    baseline: "7.38 km",
-    scenario: "7.38 km",
-    delta: "0.00 km",
-  },
-];
 
+type DashboardMetrics = {
+  settlementsAnalysed: number;
+  potentiallyAffectedRoads: number;
+  buildingsInDrainageCorridor: number;
+  potentiallyAffectedBridges: number;
+  baselineReachable: number;
+  baselineUnreachable: number;
+  potentiallyCutOff: number;
+  longerRoute: number;
+};
 
-function SectionHeader({
+type DashboardRoadRecord = { id: string; roadClass: string; total: string; overlap: string; percent: string };
+type DashboardSettlementRecord = { settlement: string; status: string; baseline: string; scenario: string; delta: string };
+type DashboardBuildingRecord = { id: string; osmType: string; geometryType: string; attributes: string; clippedToCorridor: boolean; classification: string };
+type DashboardBridgeRecord = { id: string; bridgeClass: string; reference: string; mappedLength: string; evidenceOverlap: string; classification: string };
+type DashboardSnapshot = {
+  schema_version: string;
+  snapshot_version: string;
+  generated_at: string;
+  analysis: { name: string; event_date: string; radar_pair: string[]; osm_snapshot: string; analysis_version: string };
+  metrics: DashboardMetrics;
+  roadSegments: DashboardRoadRecord[];
+  settlementConnectivity: DashboardSettlementRecord[];
+  buildingRecords: DashboardBuildingRecord[];
+  bridgeRecords: DashboardBridgeRecord[];
+};
+
+function isDashboardSnapshot(value: unknown): value is DashboardSnapshot {
+  if (!value || typeof value !== "object") return false;
+  const snapshot = value as Partial<DashboardSnapshot>;
+  const metrics = snapshot.metrics;
+  const analysis = snapshot.analysis;
+  if (!metrics || typeof metrics !== "object" || !analysis || typeof analysis !== "object") return false;
+
+  const metricKeys: (keyof DashboardMetrics)[] = [
+    "settlementsAnalysed", "potentiallyAffectedRoads", "buildingsInDrainageCorridor",
+    "potentiallyAffectedBridges", "baselineReachable", "baselineUnreachable",
+    "potentiallyCutOff", "longerRoute",
+  ];
+  const roadFields: (keyof DashboardRoadRecord)[] = ["id", "roadClass", "total", "overlap", "percent"];
+  const settlementFields: (keyof DashboardSettlementRecord)[] = ["settlement", "status", "baseline", "scenario", "delta"];
+  const buildingFields: (keyof DashboardBuildingRecord)[] = ["id", "osmType", "geometryType", "attributes", "classification"];
+  const bridgeFields: (keyof DashboardBridgeRecord)[] = ["id", "bridgeClass", "reference", "mappedLength", "evidenceOverlap", "classification"];
+  const hasFields = (record: object, fields: string[]) => fields.every((field) => typeof record[field as keyof typeof record] === "string");
+
+  return snapshot.schema_version === "1.1" &&
+    typeof snapshot.snapshot_version === "string" &&
+    typeof snapshot.generated_at === "string" &&
+    typeof analysis.name === "string" &&
+    typeof analysis.event_date === "string" &&
+    Array.isArray(analysis.radar_pair) &&
+    Array.isArray(snapshot.roadSegments) &&
+    snapshot.roadSegments.every((record) => record && typeof record === "object" && hasFields(record, roadFields)) &&
+    Array.isArray(snapshot.settlementConnectivity) &&
+    snapshot.settlementConnectivity.every((record) => record && typeof record === "object" && hasFields(record, settlementFields)) &&
+    Array.isArray(snapshot.buildingRecords) &&
+    snapshot.buildingRecords.every((record) => record && typeof record === "object" && hasFields(record, buildingFields) && typeof record.clippedToCorridor === "boolean") &&
+    Array.isArray(snapshot.bridgeRecords) &&
+    snapshot.bridgeRecords.every((record) => record && typeof record === "object" && hasFields(record, bridgeFields)) &&
+    metricKeys.every((key) => typeof metrics[key] === "number" && Number.isFinite(metrics[key]));
+}
+
+const settlementStatusDescriptions: Record<string, string> = {
+  BASELINE_UNREACHABLE: "No baseline route was found; this is not a flood-induced cut-off.",
+  CUT_OFF: "A baseline route existed, but none remained under the simulated road-removal scenario.",
+  LONGER_ROUTE: "A route remains, but its distance increased under the simulated scenario.",
+  NO_CHANGE: "No meaningful accessibility change was found in the simulated scenario.",
+};function SectionHeader({
   number,
   title,
   description,
@@ -171,8 +192,27 @@ function StatusPill({
 }
 
 
+
+function DashboardDataState({ message }: { message: string }) {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-[#fdf9f0] px-5 text-[#1a1a1a]">
+      <div className="w-full max-w-xl border border-[#d8d5cc] bg-[#f7f3ea] p-6 md:p-8">
+        <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[#c05621]">Dashboard data unavailable</div>
+        <h1 className="mt-3 font-newsreader text-4xl leading-none">Flood intelligence is waiting for a valid snapshot.</h1>
+        <p className="mt-4 text-sm leading-6 text-[#717171]">{message}</p>
+      </div>
+    </div>
+  );
+}
+
 function Dashboard() {
+  const [dashboardData, setDashboardData] = useState<DashboardSnapshot | null>(null);
+  const [dataError, setDataError] = useState<string | null>(null);
   const [mapMode, setMapMode] = useState<MapMode>("impact");
+  const [selectedRoadId, setSelectedRoadId] = useState<string | null>(null);
+  const [selectedSettlementIndex, setSelectedSettlementIndex] = useState<number | null>(null);
+  const [selectedBuildingIndex, setSelectedBuildingIndex] = useState<number | null>(null);
+  const [selectedBridgeIndex, setSelectedBridgeIndex] = useState<number | null>(null);
   const [zoom, setZoom] = useState(1);
 
 
@@ -188,6 +228,53 @@ function Dashboard() {
   };
 
 
+
+  useEffect(() => {
+    let active = true;
+    fetch("/data/dashboard-snapshot.json", { cache: "no-store" })
+      .then(async (response) => {
+        if (!response.ok) throw new Error(`Snapshot request failed (${response.status}).`);
+        const payload: unknown = await response.json();
+        if (!isDashboardSnapshot(payload)) throw new Error("Snapshot schema validation failed.");
+        return payload;
+      })
+      .then((payload) => { if (active) setDashboardData(payload); })
+      .catch((error: unknown) => {
+        if (active) setDataError(error instanceof Error ? error.message : "Unknown snapshot error.");
+      });
+  return () => { active = false; };
+  }, []);
+
+  if (dataError) return <DashboardDataState message={dataError} />;
+  if (!dashboardData) return <DashboardDataState message="Loading the versioned analysis snapshot…" />;
+
+    const infrastructureSummary = [
+    { label: "BUILDINGS", value: dashboardData.metrics.buildingsInDrainageCorridor, detail: "hydrological-corridor exposure records", tone: "bg-[#385e42]" },
+    { label: "ROADS", value: dashboardData.metrics.potentiallyAffectedRoads, detail: "potentially affected road records", tone: "bg-[#c05621]" },
+    { label: "BRIDGES", value: dashboardData.metrics.potentiallyAffectedBridges, detail: "potentially affected bridge records", tone: "bg-[#2c5282]" },
+  ];
+  const infrastructureMax = Math.max(...infrastructureSummary.map((item) => item.value), 1);
+  const settlementStatusOrder = ["BASELINE_UNREACHABLE", "CUT_OFF", "LONGER_ROUTE", "NO_CHANGE"];
+  const settlementSummary = settlementStatusOrder.map((status) => ({
+    status,
+    value: dashboardData.settlementConnectivity.filter((record) => record.status === status).length,
+  }));
+  const settlementMax = Math.max(...settlementSummary.map((item) => item.value), 1);
+  const roadOverlapSummary = dashboardData.roadSegments.map((road) => ({
+    ...road,
+    overlapValue: Number.parseFloat(road.percent) || 0,
+  }));
+  const roadOverlapMax = Math.max(...roadOverlapSummary.map((road) => road.overlapValue), 1);
+  const selectedRoad = dashboardData.roadSegments.find((road) => road.id === selectedRoadId) ?? null;
+  const selectedSettlement = selectedSettlementIndex === null
+    ? null
+    : dashboardData.settlementConnectivity[selectedSettlementIndex] ?? null;
+  const selectedBuilding = selectedBuildingIndex === null
+    ? null
+    : dashboardData.buildingRecords[selectedBuildingIndex] ?? null;
+  const selectedBridge = selectedBridgeIndex === null
+    ? null
+    : dashboardData.bridgeRecords[selectedBridgeIndex] ?? null;
   return (
     <div className="min-h-screen bg-[#fdf9f0] text-[#1a1a1a]">
       <header className="sticky top-0 z-50 border-b border-[#c4c7c7]/70 bg-[#fdf9f0]">
@@ -279,7 +366,7 @@ function Dashboard() {
               </div>
 
               <div className="font-mono text-[9px] uppercase tracking-[0.08em] text-[#717171]">
-                LAT 28Â°10â€²N Â· LON 85Â°22â€²E
+                LAT 28°10′N · LON 85°22′E
                 <span className="mx-3 text-[#c4c7c7]">|</span>
                 ANALYTICAL PROTOTYPE
               </div>
@@ -287,12 +374,12 @@ function Dashboard() {
 
 
             <div className="relative overflow-hidden border border-[#d8d5cc] bg-[#f1eee4]">
-              <div className="absolute left-3 top-2 z-20 border border-[#d8d5cc]/70 bg-[#fdf9f0]/90 px-1 py-0.5 font-mono text-[8px] tracking-widest text-[#717171]">
-                N28Â°15'00" â€” E85Â°10'00"
+              <div aria-label="Static reference coordinate" className="absolute left-3 top-2 z-20 border border-[#d8d5cc]/70 bg-[#fdf9f0]/90 px-1 py-0.5 font-mono text-[8px] tracking-widest text-[#717171]">
+                REF / N28°15′00″ — E85°10′00″
               </div>
 
-              <div className="absolute right-3 top-2 z-20 border border-[#d8d5cc]/70 bg-[#fdf9f0]/90 px-1 py-0.5 font-mono text-[8px] tracking-widest text-[#717171]">
-                N28Â°15'00" â€” E85Â°30'00"
+              <div aria-label="Static reference coordinate" className="absolute right-3 top-2 z-20 border border-[#d8d5cc]/70 bg-[#fdf9f0]/90 px-1 py-0.5 font-mono text-[8px] tracking-widest text-[#717171]">
+                REF / N28°15′00″ — E85°30′00″
               </div>
 
 
@@ -348,7 +435,7 @@ function Dashboard() {
                     <div className="col-span-2">
                       <span>RADAR PAIR:</span>{" "}
                       <span className="font-semibold text-[#1a1a1a]">
-                        16 â†’ 28 AUG 2026
+                        16 → 28 AUG 2026
                       </span>
                     </div>
 
@@ -365,7 +452,7 @@ function Dashboard() {
                 <div className="absolute bottom-5 right-5 z-20 hidden items-center gap-4 border border-[#747878]/50 bg-[#fdf9f0]/95 px-4 py-3 font-mono text-[9px] md:flex">
                   <div>
                     <div className="uppercase tracking-wider text-[#717171]">
-                      METRIC SCALE
+                      STATIC REFERENCE / METRIC SCALE
                     </div>
                     <div className="mt-1 flex items-center gap-2">
                       <div className="flex h-2 w-24 border-x border-b border-[#1a1a1a]">
@@ -374,7 +461,7 @@ function Dashboard() {
                         <div className="w-1/3 bg-[#1a1a1a]" />
                       </div>
 
-                      <span>0 â€” 5 â€” 15 km</span>
+                      <span>0 — 5 — 15 km</span>
                     </div>
                   </div>
 
@@ -385,7 +472,7 @@ function Dashboard() {
                     <div>
                       <div>TRUE N</div>
                       <div className="text-[#717171]">
-                        DECL +0.2Â°
+                        DECL +0.2°
                       </div>
                     </div>
                   </div>
@@ -400,30 +487,30 @@ function Dashboard() {
               <MetricCard
                 accent="charcoal"
                 label="Settlements Analysed"
-                note="49 reachable in baseline network"
+                note={`${dashboardData.metrics.baselineReachable} reachable in baseline network`}
                 unit="LOCI"
-                value="57"
+                value={String(dashboardData.metrics.settlementsAnalysed)}
               />
               <MetricCard
                 accent="rust"
                 label="Potentially Affected Roads"
                 note="SAR evidence intersection"
                 unit="SEGS"
-                value="16"
+                value={String(dashboardData.metrics.potentiallyAffectedRoads)}
               />
               <MetricCard
                 accent="green"
                 label="Buildings in Drainage Corridor"
                 note="100 m hydrologic corridor"
                 unit="BLDG"
-                value="529"
+                value={String(dashboardData.metrics.buildingsInDrainageCorridor)}
               />
               <MetricCard
                 accent="blue"
                 label="Potentially Affected Bridges"
                 note="No bridge intersected current SAR evidence"
                 unit="SEV"
-                value="0"
+                value={String(dashboardData.metrics.potentiallyAffectedBridges)}
               />
             </div>
           </section>
@@ -456,13 +543,13 @@ function Dashboard() {
 
                 <div className="flex items-center gap-1 font-mono text-[9px] uppercase text-[#717171]">
                   <span className="mr-1">
-                    VIEWPORT {Math.round(zoom * 100)}%
+                    IMAGE SCALE {Math.round(zoom * 100)}%
                   </span>
 
                   <button
                     aria-label="Zoom in"
                     onClick={() => changeZoom(0.1)}
-                    className="flex h-7 w-7 items-center justify-center border border-[#d8d5cc] bg-[#fdf9f0]"
+                    type="button" className="flex h-7 w-7 items-center justify-center border border-[#d8d5cc] bg-[#fdf9f0]"
                   >
                     <Plus size={14} />
                   </button>
@@ -470,7 +557,7 @@ function Dashboard() {
                   <button
                     aria-label="Zoom out"
                     onClick={() => changeZoom(-0.1)}
-                    className="flex h-7 w-7 items-center justify-center border border-[#d8d5cc] bg-[#fdf9f0]"
+                    type="button" className="flex h-7 w-7 items-center justify-center border border-[#d8d5cc] bg-[#fdf9f0]"
                   >
                     <Minus size={14} />
                   </button>
@@ -478,7 +565,7 @@ function Dashboard() {
                   <button
                     aria-label="Reset zoom"
                     onClick={resetZoom}
-                    className="flex h-7 items-center gap-1 border border-[#d8d5cc] bg-[#fdf9f0] px-2"
+                    type="button" className="flex h-7 items-center gap-1 border border-[#d8d5cc] bg-[#fdf9f0] px-2"
                   >
                     <RotateCcw size={12} />
                     Reset
@@ -503,48 +590,36 @@ function Dashboard() {
                     <div className="h-2 w-2 bg-[#c05621]" />
 
                     <div className="absolute -top-6 whitespace-nowrap bg-[#1a1a1a] px-1.5 py-1 font-mono text-[9px] tracking-widest text-white">
-                      ANALYSIS CENTRE
+                      STATIC REFERENCE · ANALYSIS CENTRE
                     </div>
                   </div>
                 </div>
 
 
-                <div className="absolute bottom-4 left-4 border border-[#1a1a1a] bg-[#fdf9f0]/95 p-3 font-mono text-[9px]">
+                <div className="absolute bottom-4 left-4 max-w-[min(25rem,calc(100%-2rem))] border border-[#1a1a1a] bg-[#fdf9f0]/95 p-3 font-mono text-[9px]">
                   <div className="mb-2 border-b border-[#d8d5cc] pb-1 font-semibold uppercase tracking-wider">
-                    Cartographic overlays
+                    {evidenceMetadata[mapMode].title}
                   </div>
 
-                  <div className="flex items-center gap-2 py-0.5">
-                    <span className="h-3 w-3 bg-[#c05621]" />
-                    <span>
-                      SAR evidence
-                    </span>
-                  </div>
+                  <p className="max-w-md leading-4 text-[#4a4a4a]">
+                    {evidenceMetadata[mapMode].explanation}
+                  </p>
 
-                  <div className="flex items-center gap-2 py-0.5">
-                    <span className="h-1 w-3 bg-[#2c5282]" />
-                    <span>
-                      Main drainage
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2 py-0.5">
-                    <span className="h-3 w-3 border border-[#385e42]" />
-                    <span>
-                      Hydrologic corridor
-                    </span>
+                  <div className="mt-2 grid gap-1 border-t border-[#d8d5cc] pt-2 uppercase tracking-[0.04em] text-[#717171]">
+                    <span>SOURCE / {evidenceMetadata[mapMode].source}</span>
+                    <span>DATE / {evidenceMetadata[mapMode].date}</span>
+                    <span>CLASS / {evidenceMetadata[mapMode].classification}</span>
                   </div>
                 </div>
-
-
                 <div className="absolute right-4 top-4 border border-[#1a1a1a] bg-[#fdf9f0]/95 p-3">
                   <div className="flex items-center gap-2 font-mono text-[9px] uppercase">
                     <Layers3 size={13} />
-                    <span>{mapLabels[mapMode]}</span>
+                    <span>{evidenceMetadata[mapMode].title}</span>
                   </div>
                 </div>
               </div>
             </div>
+
 
 
             <div className="border-l-2 border-[#c05621] bg-[#f0ddd5] px-4 py-3 text-xs leading-5 text-[#694236]">
@@ -625,17 +700,17 @@ function Dashboard() {
               {[
                 [
                   "BUILDINGS",
-                  "529",
+                  String(dashboardData.metrics.buildingsInDrainageCorridor),
                   "Buildings inside the 100 m drainage corridor.",
                 ],
                 [
                   "ROADS",
-                  "16",
+                  String(dashboardData.metrics.potentiallyAffectedRoads),
                   "Road features intersecting SAR evidence.",
                 ],
                 [
                   "BRIDGES",
-                  "0",
+                  String(dashboardData.metrics.potentiallyAffectedBridges),
                   "No bridge feature intersected current joint SAR evidence.",
                 ],
               ].map(([label, value, description]) => (
@@ -659,6 +734,91 @@ function Dashboard() {
             </div>
 
 
+            <section aria-labelledby="summary-visualizations" className="flex flex-col gap-4 border-y border-[#d8d5cc] py-4">
+              <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+                <div>
+                  <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[#2c5282]">03 / SUMMARY VISUALIZATIONS</div>
+                  <h3 id="summary-visualizations" className="mt-1 font-newsreader text-3xl leading-none">Exposure and access at a glance</h3>
+                </div>
+                <p className="max-w-xl text-xs leading-5 text-[#717171]">Snapshot-backed summaries of potential infrastructure exposure and network-disruption scenario classifications. These are not confirmed physical damage or real-world isolation findings.</p>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                <div className="border border-[#d8d5cc] bg-[#f7f3ea] p-4">
+                  <div className="flex items-baseline justify-between border-b border-[#d8d5cc] pb-2">
+                    <h4 className="font-mono text-[10px] font-semibold uppercase tracking-[0.08em]">Infrastructure exposure</h4>
+                    <span className="font-mono text-[9px] uppercase text-[#717171]">records</span>
+                  </div>
+                  <div className="mt-4 space-y-4" role="list" aria-label="Infrastructure exposure summary">
+                    {infrastructureSummary.map((item) => (
+                      <div key={item.label} role="listitem">
+                        <div className="flex items-baseline justify-between gap-3 font-mono text-[10px]">
+                          <span className="font-semibold">{item.label}</span>
+                          <span>{item.value}</span>
+                        </div>
+                        <div className="mt-1 h-2 bg-[#e2dfd7]" role="progressbar" aria-label={`${item.label} ${item.detail}`} aria-valuemin={0} aria-valuemax={infrastructureMax} aria-valuenow={item.value}>
+                          <div className={`h-full ${item.tone}`} style={{ width: `${(item.value / infrastructureMax) * 100}%` }} />
+                        </div>
+                        <div className="mt-1 text-[10px] text-[#717171]">{item.detail}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="border border-[#d8d5cc] bg-[#f7f3ea] p-4">
+                  <div className="flex items-baseline justify-between border-b border-[#d8d5cc] pb-2">
+                    <h4 className="font-mono text-[10px] font-semibold uppercase tracking-[0.08em]">Settlement accessibility</h4>
+                    <span className="font-mono text-[9px] uppercase text-[#717171]">scenario records</span>
+                  </div>
+                  <div className="mt-4 space-y-4" role="list" aria-label="Settlement accessibility scenario classifications">
+                    {settlementSummary.map((item) => (
+                      <div key={item.status} role="listitem">
+                        <div className="flex items-baseline justify-between gap-3 font-mono text-[10px]">
+                          <span className="font-semibold">{item.status}</span>
+                          <span>{item.value}</span>
+                        </div>
+                        <div className="mt-1 h-2 bg-[#e2dfd7]" role="progressbar" aria-label={`${item.status} settlement count`} aria-valuemin={0} aria-valuemax={settlementMax} aria-valuenow={item.value}>
+                          <div className={`h-full ${item.status === "CUT_OFF" ? "bg-[#c05621]" : item.status === "LONGER_ROUTE" ? "bg-[#2c5282]" : item.status === "BASELINE_UNREACHABLE" ? "bg-[#717171]" : "bg-[#385e42]"}`} style={{ width: `${(item.value / settlementMax) * 100}%` }} />
+                        </div>
+                        <div className="mt-1 text-[10px] text-[#717171]">{settlementStatusDescriptions[item.status]}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="border border-[#d8d5cc] bg-[#f7f3ea] p-4">
+                <div className="flex flex-col gap-2 border-b border-[#d8d5cc] pb-2 sm:flex-row sm:items-baseline sm:justify-between">
+                  <h4 className="font-mono text-[10px] font-semibold uppercase tracking-[0.08em]">Road evidence overlap</h4>
+                  <span className="font-mono text-[9px] uppercase text-[#717171]">Select a bar to inspect the table record</span>
+                </div>
+                {roadOverlapSummary.length === 0 ? (
+                  <div className="py-5 text-xs text-[#717171]">No road records are available in the generated snapshot.</div>
+                ) : (
+                  <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-2 md:grid-cols-2" role="list" aria-label="Road evidence overlap percentages">
+                    {roadOverlapSummary.map((road) => (
+                      <button
+                        key={road.id}
+                        type="button"
+                        role="listitem"
+                        aria-label={`Select road ${road.id}, ${road.overlapValue.toFixed(2)} percent evidence overlap`}
+                        aria-pressed={selectedRoadId === road.id}
+                        onClick={() => setSelectedRoadId(road.id)}
+                        className={`group min-w-0 text-left outline-none focus-visible:ring-2 focus-visible:ring-[#2c5282] ${selectedRoadId === road.id ? "bg-[#e3eaf2]" : ""}`}
+                      >
+                        <div className="flex items-baseline justify-between gap-2 font-mono text-[9px]">
+                          <span className="truncate font-semibold">OSM {road.id} · {road.roadClass}</span>
+                          <span className="shrink-0 text-[#2c5282]">{road.percent}</span>
+                        </div>
+                        <div className="mt-1 h-2 bg-[#e2dfd7]">
+                          <div className="h-full bg-[#c05621] transition-[width] duration-300 group-hover:bg-[#2c5282]" style={{ width: `${(road.overlapValue / roadOverlapMax) * 100}%` }} />
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </section>
             <div className="overflow-x-auto border border-[#d8d5cc] bg-[#f7f3ea]">
               <div className="flex items-center justify-between border-b border-[#d8d5cc] bg-[#ebe8df] px-4 py-3 font-mono text-[9px] uppercase">
                 <span className="font-semibold">
@@ -670,11 +830,194 @@ function Dashboard() {
                 </span>
               </div>
 
-              <EvidenceLedgerTable roads={roadData} />
+              <EvidenceLedgerTable
+                roads={dashboardData.roadSegments}
+                selectedRoadId={selectedRoadId}
+                onSelectRoad={setSelectedRoadId}
+              />
+
+              {selectedRoad ? (
+                <aside
+                  aria-label="Selected potential road exposure"
+                  className="border-t border-[#d8d5cc] bg-[#fdf9f0] px-4 py-4"
+                  role="region"
+                >
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                      <div className="font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-[#c05621]">
+                        Potential road exposure · selected record
+                      </div>
+                      <h3 className="mt-1 font-newsreader text-2xl leading-none">
+                        OSM {selectedRoad.id}
+                      </h3>
+                      <p className="mt-2 max-w-2xl text-xs leading-5 text-[#717171]">
+                        This record indicates potential exposure where the analysis evidence overlaps a mapped road. It does not confirm physical road damage, and the static PNG map is not highlighted by this selection.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedRoadId(null)}
+                      className="shrink-0 border border-[#1a1a1a] bg-[#f7f3ea] px-3 py-2 font-mono text-[9px] uppercase tracking-[0.08em] transition-colors hover:bg-[#ebe8df] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2c5282]"
+                    >
+                      Clear selection
+                    </button>
+                  </div>
+
+                  <dl className="mt-4 grid grid-cols-2 gap-3 border-t border-[#d8d5cc] pt-3 sm:grid-cols-5">
+                    <div>
+                      <dt className="font-mono text-[9px] uppercase text-[#717171]">OSM ID</dt>
+                      <dd className="mt-1 font-mono text-xs">{selectedRoad.id}</dd>
+                    </div>
+                    <div>
+                      <dt className="font-mono text-[9px] uppercase text-[#717171]">Road class</dt>
+                      <dd className="mt-1 font-mono text-xs uppercase">{selectedRoad.roadClass}</dd>
+                    </div>
+                    <div>
+                      <dt className="font-mono text-[9px] uppercase text-[#717171]">Mapped length</dt>
+                      <dd className="mt-1 font-mono text-xs">{selectedRoad.total}</dd>
+                    </div>
+                    <div>
+                      <dt className="font-mono text-[9px] uppercase text-[#717171]">Evidence overlap</dt>
+                      <dd className="mt-1 font-mono text-xs text-[#c05621]">{selectedRoad.overlap}</dd>
+                    </div>
+                    <div>
+                      <dt className="font-mono text-[9px] uppercase text-[#717171]">Overlap</dt>
+                      <dd className="mt-1 font-mono text-xs text-[#2c5282]">{selectedRoad.percent}</dd>
+                    </div>
+                  </dl>
+                </aside>
+              ) : (
+                <div className="border-t border-[#d8d5cc] bg-[#fdf9f0] px-4 py-3 font-mono text-[9px] uppercase tracking-[0.06em] text-[#717171]">
+                  Select a road row with a mouse, Enter, or Space to inspect potential exposure details.
+                </div>
+              )}
             </div>
           </section>
 
 
+          <section className="flex flex-col gap-4">
+            <SectionHeader
+              number="03A / BUILDINGS"
+              title="Inspect corridor exposure"
+              description="Building records intersecting the DEM-derived drainage corridor are shown as hydrological-corridor exposure, not confirmed building damage."
+            />
+
+            <div className="overflow-x-auto border border-[#d8d5cc] bg-[#f7f3ea]">
+              <div className="flex items-center justify-between border-b border-[#d8d5cc] bg-[#ebe8df] px-4 py-3 font-mono text-[9px] uppercase">
+                <span className="font-semibold">Buildings in drainage corridor</span>
+                <span className="text-[#717171]">Hydrological exposure ledger</span>
+              </div>
+
+              {dashboardData.buildingRecords.length === 0 ? (
+                <div className="px-4 py-6 text-xs leading-5 text-[#717171]">
+                  No building exposure records are available in the generated snapshot.
+                </div>
+              ) : (
+                <>
+                  <table className="w-full min-w-[760px] border-collapse text-left font-mono text-[10px]">
+                    <caption className="sr-only">Buildings exposed within the drainage corridor. Select a row to inspect the source-backed record.</caption>
+                    <thead className="border-b border-[#1a1a1a] bg-[#efece4] text-[#717171]">
+                      <tr>
+                        <th className="px-4 py-3 font-semibold">OSM ID</th>
+                        <th className="px-4 py-3 font-semibold">OSM TYPE</th>
+                        <th className="px-4 py-3 font-semibold">GEOMETRY</th>
+                        <th className="px-4 py-3 font-semibold">ATTRIBUTES</th>
+                        <th className="px-4 py-3 font-semibold">CLASSIFICATION</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {dashboardData.buildingRecords.map((building, index) => (
+                        <tr
+                          key={`${building.id}-${index}`}
+                          aria-label={`Select building corridor exposure ${building.id}`}
+                          aria-selected={selectedBuildingIndex === index}
+                          role="button"
+                          tabIndex={0}
+                          onClick={() => setSelectedBuildingIndex(index)}
+                          onKeyDown={(event) => {
+                            if (event.key === "Enter" || event.key === " ") {
+                              event.preventDefault();
+                              setSelectedBuildingIndex(index);
+                            }
+                          }}
+                          className={`cursor-pointer border-b border-[#e2dfd7] outline-none transition-colors focus-visible:bg-[#e3eaf2] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#2c5282] ${selectedBuildingIndex === index ? "bg-[#e3eaf2]" : "hover:bg-[#f4f2ec]"}`}
+                        >
+                          <td className="whitespace-nowrap px-4 py-3 text-[#4a4a4a]">{building.id}</td>
+                          <td className="px-4 py-3 uppercase">{building.osmType}</td>
+                          <td className="px-4 py-3">{building.geometryType}</td>
+                          <td className="max-w-[16rem] truncate px-4 py-3 text-[#717171]">{building.attributes}</td>
+                          <td className="px-4 py-3 uppercase text-[#385e42]">{building.classification}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+
+                  {selectedBuilding ? (
+                    <aside aria-label="Selected building corridor exposure" className="border-t border-[#d8d5cc] bg-[#fdf9f0] px-4 py-4" role="region">
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                        <div>
+                          <div className="font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-[#385e42]">Hydrological-corridor exposure · selected record</div>
+                          <h3 className="mt-1 font-newsreader text-2xl leading-none">OSM {selectedBuilding.id}</h3>
+                          <p className="mt-2 max-w-3xl text-xs leading-5 text-[#717171]">This source record is inside the DEM-derived drainage corridor. It does not confirm building damage, and the static PNG map is not highlighted by this selection.</p>
+                        </div>
+                        <button type="button" onClick={() => setSelectedBuildingIndex(null)} className="shrink-0 border border-[#1a1a1a] bg-[#f7f3ea] px-3 py-2 font-mono text-[9px] uppercase tracking-[0.08em] transition-colors hover:bg-[#ebe8df] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2c5282]">Clear selection</button>
+                      </div>
+                      <dl className="mt-4 grid grid-cols-2 gap-3 border-t border-[#d8d5cc] pt-3 sm:grid-cols-5">
+                        <div><dt className="font-mono text-[9px] uppercase text-[#717171]">OSM ID</dt><dd className="mt-1 font-mono text-xs">{selectedBuilding.id}</dd></div>
+                        <div><dt className="font-mono text-[9px] uppercase text-[#717171]">OSM type</dt><dd className="mt-1 font-mono text-xs uppercase">{selectedBuilding.osmType}</dd></div>
+                        <div><dt className="font-mono text-[9px] uppercase text-[#717171]">Geometry</dt><dd className="mt-1 font-mono text-xs">{selectedBuilding.geometryType}</dd></div>
+                        <div><dt className="font-mono text-[9px] uppercase text-[#717171]">Attributes</dt><dd className="mt-1 font-mono text-xs">{selectedBuilding.attributes}</dd></div>
+                        <div><dt className="font-mono text-[9px] uppercase text-[#717171]">Exposure class</dt><dd className="mt-1 font-mono text-xs uppercase text-[#385e42]">{selectedBuilding.classification}</dd></div>
+                      </dl>
+                    </aside>
+                  ) : (
+                    <div className="border-t border-[#d8d5cc] bg-[#fdf9f0] px-4 py-3 font-mono text-[9px] uppercase tracking-[0.06em] text-[#717171]">Select a building row with a mouse, Enter, or Space to inspect corridor exposure details.</div>
+                  )}
+                </>
+              )}
+            </div>
+          </section>
+
+          <section className="flex flex-col gap-4">
+            <SectionHeader
+              number="03B / BRIDGES"
+              title="Bridge exposure records"
+              description="Potentially affected bridge records from the analysis source are reported separately from buildings and roads."
+            />
+
+            <div className="border border-[#d8d5cc] bg-[#f7f3ea]">
+              <div className="flex items-center justify-between border-b border-[#d8d5cc] bg-[#ebe8df] px-4 py-3 font-mono text-[9px] uppercase">
+                <span className="font-semibold">Potentially affected bridges</span>
+                <span className="text-[#717171]">Source-backed records only</span>
+              </div>
+
+              {dashboardData.bridgeRecords.length === 0 ? (
+                <div className="px-4 py-6 text-xs leading-5 text-[#717171]">
+                  <strong className="font-mono text-[10px] uppercase text-[#1a1a1a]">0 potentially affected bridge records.</strong>{" "}
+                  The source contains no records under the current analysis criteria. This does not prove that no bridges were damaged; it only reports the available analysis result.
+                </div>
+              ) : (
+                <>
+                  <div className="overflow-x-auto">
+                    <table className="w-full min-w-[720px] border-collapse text-left font-mono text-[10px]">
+                      <caption className="sr-only">Potentially affected bridge records. Select a row to inspect the source-backed record.</caption>
+                      <thead className="border-b border-[#1a1a1a] bg-[#efece4] text-[#717171]"><tr><th className="px-4 py-3 font-semibold">OSM ID</th><th className="px-4 py-3 font-semibold">CLASS</th><th className="px-4 py-3 font-semibold">REFERENCE</th><th className="px-4 py-3 font-semibold">MAPPED LENGTH</th><th className="px-4 py-3 font-semibold">EVIDENCE OVERLAP</th></tr></thead>
+                      <tbody>
+                        {dashboardData.bridgeRecords.map((bridge, index) => (
+                          <tr key={`${bridge.id}-${index}`} aria-label={`Select bridge exposure ${bridge.id}`} aria-selected={selectedBridgeIndex === index} role="button" tabIndex={0} onClick={() => setSelectedBridgeIndex(index)} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setSelectedBridgeIndex(index); } }} className={`cursor-pointer border-b border-[#e2dfd7] outline-none transition-colors focus-visible:bg-[#e3eaf2] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#2c5282] ${selectedBridgeIndex === index ? "bg-[#e3eaf2]" : "hover:bg-[#f4f2ec]"}`}>
+                            <td className="whitespace-nowrap px-4 py-3">{bridge.id}</td><td className="px-4 py-3 uppercase">{bridge.bridgeClass}</td><td className="px-4 py-3">{bridge.reference || "—"}</td><td className="px-4 py-3">{bridge.mappedLength}</td><td className="px-4 py-3 text-[#c05621]">{bridge.evidenceOverlap}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  {selectedBridge ? (
+                    <aside aria-label="Selected bridge exposure" className="border-t border-[#d8d5cc] bg-[#fdf9f0] px-4 py-4" role="region"><div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"><div><div className="font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-[#2c5282]">Potential bridge exposure · selected record</div><h3 className="mt-1 font-newsreader text-2xl leading-none">OSM {selectedBridge.id}</h3><p className="mt-2 text-xs leading-5 text-[#717171]">This is a potential exposure record from the analysis source, not a confirmation of bridge damage. The static PNG map is not highlighted by this selection.</p></div><button type="button" onClick={() => setSelectedBridgeIndex(null)} className="shrink-0 border border-[#1a1a1a] bg-[#f7f3ea] px-3 py-2 font-mono text-[9px] uppercase tracking-[0.08em] transition-colors hover:bg-[#ebe8df] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2c5282]">Clear selection</button></div><dl className="mt-4 grid grid-cols-2 gap-3 border-t border-[#d8d5cc] pt-3 sm:grid-cols-5"><div><dt className="font-mono text-[9px] uppercase text-[#717171]">OSM ID</dt><dd className="mt-1 font-mono text-xs">{selectedBridge.id}</dd></div><div><dt className="font-mono text-[9px] uppercase text-[#717171]">Class</dt><dd className="mt-1 font-mono text-xs uppercase">{selectedBridge.bridgeClass}</dd></div><div><dt className="font-mono text-[9px] uppercase text-[#717171]">Reference</dt><dd className="mt-1 font-mono text-xs">{selectedBridge.reference || "—"}</dd></div><div><dt className="font-mono text-[9px] uppercase text-[#717171]">Mapped length</dt><dd className="mt-1 font-mono text-xs">{selectedBridge.mappedLength}</dd></div><div><dt className="font-mono text-[9px] uppercase text-[#717171]">Evidence overlap</dt><dd className="mt-1 font-mono text-xs text-[#c05621]">{selectedBridge.evidenceOverlap}</dd></div></dl></aside>
+                  ) : null}
+                </>
+              )}
+            </div>
+          </section>
           <section
             id="accessibility"
             className="flex flex-col gap-4"
@@ -690,22 +1033,22 @@ function Dashboard() {
               {[
                 [
                   "BASELINE REACHABLE",
-                  "49",
+                  String(dashboardData.metrics.baselineReachable),
                   "Normal network access",
                 ],
                 [
                   "BASELINE UNREACHABLE",
-                  "8",
+                  String(dashboardData.metrics.baselineUnreachable),
                   "Already disconnected",
                 ],
                 [
                   "POTENTIALLY CUT OFF",
-                  "0",
+                  String(dashboardData.metrics.potentiallyCutOff),
                   "No route after scenario",
                 ],
                 [
                   "LONGER ROUTE",
-                  "0",
+                  String(dashboardData.metrics.longerRoute),
                   "Reachable with detour",
                 ],
               ].map(([label, value, note]) => (
@@ -766,10 +1109,21 @@ function Dashboard() {
                 </thead>
 
                 <tbody>
-                  {settlementData.map((row) => (
+                  {dashboardData.settlementConnectivity.map((row, index) => (
                     <tr
-                      key={row.settlement}
-                      className="border-b border-[#e2dfd7] hover:bg-[#f4f2ec]"
+                      key={`${row.settlement}-${index}`}
+                      aria-label={`Select settlement accessibility record ${row.settlement}`}
+                      aria-selected={selectedSettlementIndex === index}
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => setSelectedSettlementIndex(index)}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          setSelectedSettlementIndex(index);
+                        }
+                      }}
+                      className={`cursor-pointer border-b border-[#e2dfd7] outline-none transition-colors focus-visible:bg-[#e3eaf2] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#2c5282] ${selectedSettlementIndex === index ? "bg-[#e3eaf2]" : "hover:bg-[#f4f2ec]"}`}
                     >
                       <td className="px-4 py-3 font-medium">
                         {row.settlement}
@@ -799,6 +1153,65 @@ function Dashboard() {
             </div>
 
 
+              {selectedSettlement ? (
+                <aside
+                  aria-label="Selected settlement accessibility record"
+                  className="border-t border-[#d8d5cc] bg-[#fdf9f0] px-4 py-4"
+                  role="region"
+                >
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                      <div className="font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-[#2c5282]">
+                        Network-disruption scenario · selected record
+                      </div>
+                      <h3 className="mt-1 font-newsreader text-2xl leading-none">
+                        {selectedSettlement.settlement}
+                      </h3>
+                      <p className="mt-2 max-w-3xl text-xs leading-5 text-[#717171]">
+                        {settlementStatusDescriptions[selectedSettlement.status] ?? "Classification supplied by the analysis snapshot."} Results describe a simulated network-disruption scenario, not confirmed real-world isolation.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedSettlementIndex(null)}
+                      className="shrink-0 border border-[#1a1a1a] bg-[#f7f3ea] px-3 py-2 font-mono text-[9px] uppercase tracking-[0.08em] transition-colors hover:bg-[#ebe8df] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2c5282]"
+                    >
+                      Clear selection
+                    </button>
+                  </div>
+
+                  <dl className="mt-4 grid grid-cols-2 gap-3 border-t border-[#d8d5cc] pt-3 sm:grid-cols-5">
+                    <div>
+                      <dt className="font-mono text-[9px] uppercase text-[#717171]">Baseline status</dt>
+                      <dd className="mt-1 font-mono text-xs uppercase">
+                        {selectedSettlement.status === "BASELINE_UNREACHABLE" ? "BASELINE_UNREACHABLE" : "BASELINE ROUTE FOUND"}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="font-mono text-[9px] uppercase text-[#717171]">Baseline route</dt>
+                      <dd className="mt-1 font-mono text-xs">{selectedSettlement.baseline}</dd>
+                    </div>
+                    <div>
+                      <dt className="font-mono text-[9px] uppercase text-[#717171]">Scenario status</dt>
+                      <dd className="mt-1 font-mono text-xs uppercase">
+                        {selectedSettlement.status === "BASELINE_UNREACHABLE" ? "NOT ASSESSED" : selectedSettlement.status}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="font-mono text-[9px] uppercase text-[#717171]">Scenario route</dt>
+                      <dd className="mt-1 font-mono text-xs">{selectedSettlement.scenario}</dd>
+                    </div>
+                    <div>
+                      <dt className="font-mono text-[9px] uppercase text-[#717171]">Route change</dt>
+                      <dd className="mt-1 font-mono text-xs text-[#2c5282]">{selectedSettlement.delta}</dd>
+                    </div>
+                  </dl>
+                </aside>
+              ) : (
+                <div className="border-t border-[#d8d5cc] bg-[#fdf9f0] px-4 py-3 font-mono text-[9px] uppercase tracking-[0.06em] text-[#717171]">
+                  Select a settlement row with a mouse, Enter, or Space to inspect accessibility details.
+                </div>
+              )}
             <div className="border-l-2 border-[#c05621] bg-[#f0ddd5] px-4 py-3 text-xs leading-5 text-[#694236]">
               <strong>Scenario interpretation:</strong>{" "}
               BASELINE_UNREACHABLE settlements were already disconnected
@@ -914,7 +1327,7 @@ function Dashboard() {
             <div>
               Contains modified Copernicus Sentinel data 2026.
               <br />
-              Â© OpenStreetMap contributors.
+              © OpenStreetMap contributors.
             </div>
 
             <div className="text-left md:text-right">
@@ -931,31 +1344,9 @@ function Dashboard() {
 }
 
 
-function LandingPage() {
-  const signals = [["57", "settlements analysed", "text-[#1a1a1a]"], ["16", "potentially affected roads", "text-[#c05621]"], ["529", "buildings in drainage corridor", "text-[#385e42]"], ["0", "potentially affected bridges", "text-[#2c5282]"]];
-  const chain = [["01", "Observe", "Sentinel-1", "Radar evidence of flood-related surface change."], ["02", "Trace", "Copernicus DEM", "Terrain pathways that help read how water may move."], ["03", "Overlay", "Pre-event OSM", "Infrastructure and settlement context before the event."], ["04", "Assess", "Road accessibility scenario", "A scenario for how potentially affected segments may alter access."]];
-  return <div className="min-h-screen bg-[#fdf9f0] text-[#1a1a1a]">
-    <header className="border-b border-[#d8d5cc]"><div className="mx-auto flex max-w-[1440px] items-center justify-between px-5 py-5 md:px-10"><a href="/" className="flex items-baseline font-mono text-sm font-bold uppercase tracking-[0.08em]">FLOOD<span className="mx-1 text-[#717171]">/</span><span className="font-newsreader text-base italic font-normal">INTELLIGENCE</span></a><div className="flex items-center gap-5 font-mono text-[9px] uppercase tracking-[0.09em] text-[#717171]"><span className="hidden md:inline">RASUWA CORRIDOR / 2026</span><a href="/dashboard" className="border-b border-[#1a1a1a] py-1 text-[#1a1a1a]">Open dashboard ↗</a></div></div></header>
-    <main>
-      <section className="mx-auto grid max-w-[1440px] gap-10 px-5 pb-20 pt-16 md:grid-cols-[1.02fr_0.98fr] md:px-10 md:pb-28 md:pt-24"><div className="flex flex-col justify-center"><div className="mb-7 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.16em] text-[#2c5282]"><span className="h-2 w-2 bg-[#2c5282]" /> GEO-RAPID REPORT / RASUWA-0826</div><h1 className="max-w-3xl font-newsreader text-[clamp(4rem,9vw,8.6rem)] leading-[0.82] tracking-[-0.055em]">Flood from space.<br /><span className="italic text-[#2c5282]">Impact on the ground.</span></h1><p className="mt-9 max-w-xl text-base leading-7 text-[#4a4a4a] md:text-lg">A satellite-driven analysis of flood-related change, terrain pathways, infrastructure exposure and settlement accessibility across the Rasuwa corridor.</p><div className="mt-10 flex flex-wrap items-center gap-5"><a href="/dashboard" className="inline-flex items-center gap-3 bg-[#1a1a1a] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.12em] text-[#fdf9f0] hover:bg-[#2c5282]">Explore the analysis <ArrowUpRight size={15} /></a><span className="font-mono text-[9px] uppercase tracking-[0.08em] text-[#717171]">Sentinel-1 + DEM + OSM</span></div></div><figure className="relative min-h-[430px] overflow-hidden border border-[#d8d5cc] bg-[#efece4] md:min-h-[600px]"><img src="/evidence/final_impact_map.png" alt="Final impact evidence map for the Rasuwa corridor" className="h-full w-full object-cover" /><div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#1a1a1a]/45 via-transparent to-transparent" /><figcaption className="absolute bottom-0 left-0 right-0 flex justify-between p-4 font-mono text-[9px] uppercase tracking-[0.08em] text-[#fdf9f0]"><span>Evidence view / final impact map</span><span>28 AUG 2026</span></figcaption></figure></section>
-      <section className="border-y border-[#d8d5cc] bg-[#f7f3ea]/55"><div className="mx-auto max-w-[1440px] px-5 py-12 md:px-10 md:py-16"><div className="mb-8 border-b border-[#d8d5cc] pb-3"><h2 className="font-mono text-[10px] font-semibold uppercase tracking-[0.15em] text-[#2c5282]">Signal / At a glance</h2></div><div className="grid grid-cols-2 gap-y-8 md:grid-cols-4 md:divide-x md:divide-[#d8d5cc]">{signals.map(([value, label, tone]) => <div key={label} className="md:px-6 first:md:pl-0"><div className={`font-newsreader text-6xl leading-none ${tone}`}>{value}</div><div className="mt-3 max-w-[150px] font-mono text-[10px] font-semibold uppercase leading-4 tracking-[0.06em]">{label}</div></div>)}</div></div></section>
-      <section className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28"><div className="grid gap-12 md:grid-cols-[0.75fr_1.25fr]"><div><div className="font-mono text-[10px] font-semibold uppercase tracking-[0.15em] text-[#2c5282]">From signal to consequence</div><h2 className="mt-4 max-w-sm font-newsreader text-5xl leading-[0.95] md:text-6xl">A chain of evidence, not a single answer.</h2></div><div className="border-t border-[#d8d5cc]">{chain.map(([number, title, source, description]) => <div key={number} className="grid gap-3 border-b border-[#d8d5cc] py-5 md:grid-cols-[52px_1fr_1.4fr] md:items-baseline md:gap-5"><span className="font-mono text-[10px] text-[#c05621]">{number}</span><div className="font-newsreader text-3xl">{title} <span className="text-[#717171]">—</span></div><div><div className="font-mono text-[10px] uppercase tracking-[0.08em] text-[#2c5282]">{source}</div><p className="mt-2 text-sm leading-6 text-[#717171]">{description}</p></div></div>)}</div></div></section>
-      <section className="border-y border-[#d8d5cc] bg-[#efece4]"><div className="mx-auto grid max-w-[1440px] gap-10 px-5 py-20 md:grid-cols-2 md:px-10 md:py-24"><div><div className="font-mono text-[10px] font-semibold uppercase tracking-[0.15em] text-[#385e42]">Why this matters</div><h2 className="mt-4 font-newsreader text-5xl leading-[0.95] md:text-6xl">From satellite evidence to decisions on the ground.</h2></div><p className="max-w-lg self-end text-base leading-7 text-[#4a4a4a]">The system connects observed surface change with terrain, infrastructure exposure and settlement accessibility. It makes the analytical chain visible so that each consequence can be read against the evidence that led to it.</p></div></section>
-      <section className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28"><div className="border-l-2 border-[#c05621] pl-6 md:pl-10"><div className="font-mono text-[10px] font-semibold uppercase tracking-[0.15em] text-[#c05621]">Scientific restraint</div><div className="mt-5 grid gap-8 md:grid-cols-2"><p className="max-w-xl font-newsreader text-3xl leading-tight">SAR evidence represents potential flood-related surface change, not a confirmed operational flood boundary.</p><p className="max-w-xl text-sm leading-6 text-[#717171]">Infrastructure intersecting the evidence is classified as potentially affected, not confirmed damaged. Network disruption is a scenario based on potentially affected road segments.</p></div></div></section>
-      <section className="border-t border-[#d8d5cc] bg-[#1a1a1a] text-[#fdf9f0]"><div className="mx-auto flex max-w-[1440px] flex-col gap-8 px-5 py-14 md:flex-row md:items-end md:justify-between md:px-10 md:py-20"><div><div className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#9db8d7]">Next / evidence in context</div><h2 className="mt-4 max-w-xl font-newsreader text-5xl leading-[0.9] md:text-7xl">Read the full flood intelligence.</h2></div><a href="/dashboard" className="inline-flex shrink-0 items-center gap-3 border border-[#fdf9f0]/60 px-5 py-3 font-mono text-[10px] uppercase tracking-[0.12em] hover:bg-[#fdf9f0] hover:text-[#1a1a1a]">Open flood intelligence dashboard <ArrowUpRight size={15} /></a></div></section>
-    </main>
-  </div>;
-}
-
 function App() {
-  return window.location.pathname === "/dashboard" ? <Dashboard /> : <LandingPage />;
+  return window.location.pathname === "/dashboard" ? <Dashboard /> : <GlobeScrollDemo />;
 }
 
 export default App;
-
-
-
-
-
-
 

@@ -28,6 +28,10 @@ Thumbs.db
 frontend/node_modules/
 frontend/dist/
 
+# Manus working files
+.work/
+frontend/src/.manus-*.tmp
+
 # External model repository
 KuroSiwo/
 

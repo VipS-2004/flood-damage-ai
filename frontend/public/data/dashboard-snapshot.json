@@ -1,0 +1,4858 @@
+{
+  "schema_version": "1.1",
+  "snapshot_version": "rasuwa-0826-dashboard-v2",
+  "generated_at": "2026-10-11T13:49:01.130850+00:00",
+  "analysis": {
+    "name": "Flood Intelligence | Rasuwa",
+    "event_date": "2026-08-28",
+    "radar_pair": [
+      "2026-08-16",
+      "2026-08-28"
+    ],
+    "osm_snapshot": "2026-07-27",
+    "analysis_version": "rasuwa-0826"
+  },
+  "sources": {
+    "baseline_accessibility": {
+      "path": "data/processed/osm_20260727/baseline_accessibility.parquet",
+      "sha256": "efc9477c0f76cd217a87d84e6f386d2ca160ef37be871e81bf6bdde1e222976e",
+      "rows": 57,
+      "columns": [
+        "osm_id",
+        "name",
+        "name_en",
+        "display_name",
+        "place",
+        "settlement_node",
+        "nearest_hospital_node",
+        "baseline_distance_m",
+        "baseline_distance_km",
+        "baseline_accessible"
+      ]
+    },
+    "network_disruption_results": {
+      "path": "data/processed/osm_20260727/network_disruption_results.parquet",
+      "sha256": "ffd76ffb085f65229afe641857cfe0a2048c54e1805d9991a9bd98994c432ba7",
+      "rows": 57,
+      "columns": [
+        "osm_id",
+        "name",
+        "status",
+        "baseline_distance_km",
+        "post_distance_km",
+        "route_increase_km",
+        "route_increase_percent",
+        "baseline_hospital",
+        "post_hospital"
+      ]
+    },
+    "potentially_affected_roads": {
+      "path": "data/processed/osm_20260727/potentially_affected_roads.parquet",
+      "sha256": "63c3fe26d5c8a8db487e827d76cb4bfb56a8b1f465a0240f6795014481b4c652",
+      "rows": 16,
+      "columns": [
+        "osm_id",
+        "highway",
+        "priority",
+        "road_length_m",
+        "affected_length_m",
+        "affected_fraction",
+        "geom"
+      ]
+    },
+    "potentially_affected_bridges": {
+      "path": "data/processed/osm_20260727/potentially_affected_bridges.parquet",
+      "sha256": "1ad05250b17902fa5f9cdfba294e8d85744d8633cda8a7e8ad42743800aa33f0",
+      "rows": 0,
+      "columns": [
+        "osm_id",
+        "highway",
+        "ref",
+        "road_length_m",
+        "affected_length_m",
+        "geom"
+      ]
+    },
+    "buildings_drainage_corridor_exposed": {
+      "path": "outputs/buildings_drainage_corridor_exposed.parquet",
+      "sha256": "666c22e5d172848baea23dce8f393727570fdc16a1676f8d6a2a7b102bb17830",
+      "rows": 529,
+      "columns": [
+        "osm_type",
+        "osm_id",
+        "edit_timestamp",
+        "valid_to_timestamp",
+        "version",
+        "minor_version",
+        "edits",
+        "user_id",
+        "user_name",
+        "changeset_id",
+        "tags",
+        "geom_type",
+        "geom",
+        "clipped"
+      ]
+    }
+  },
+  "metrics": {
+    "settlementsAnalysed": 57,
+    "potentiallyAffectedRoads": 16,
+    "buildingsInDrainageCorridor": 529,
+    "potentiallyAffectedBridges": 0,
+    "baselineReachable": 49,
+    "baselineUnreachable": 8,
+    "potentiallyCutOff": 12,
+    "longerRoute": 18
+  },
+  "roadSegments": [
+    {
+      "id": "248708067",
+      "roadClass": "path",
+      "total": "0.45 km",
+      "overlap": "82.8 m",
+      "percent": "18.44%"
+    },
+    {
+      "id": "937405879",
+      "roadClass": "unclassified",
+      "total": "1.69 km",
+      "overlap": "202.1 m",
+      "percent": "11.97%"
+    },
+    {
+      "id": "1523551262",
+      "roadClass": "path",
+      "total": "0.31 km",
+      "overlap": "27.0 m",
+      "percent": "8.85%"
+    },
+    {
+      "id": "904894051",
+      "roadClass": "trunk",
+      "total": "0.62 km",
+      "overlap": "26.5 m",
+      "percent": "4.31%"
+    },
+    {
+      "id": "340540133",
+      "roadClass": "path",
+      "total": "0.85 km",
+      "overlap": "24.0 m",
+      "percent": "2.83%"
+    },
+    {
+      "id": "248705796",
+      "roadClass": "primary",
+      "total": "3.83 km",
+      "overlap": "79.5 m",
+      "percent": "2.08%"
+    },
+    {
+      "id": "847018434",
+      "roadClass": "path",
+      "total": "0.61 km",
+      "overlap": "10.6 m",
+      "percent": "1.74%"
+    },
+    {
+      "id": "83925842",
+      "roadClass": "path",
+      "total": "3.77 km",
+      "overlap": "56.4 m",
+      "percent": "1.50%"
+    },
+    {
+      "id": "340634328",
+      "roadClass": "unclassified",
+      "total": "2.57 km",
+      "overlap": "31.0 m",
+      "percent": "1.21%"
+    },
+    {
+      "id": "246173479",
+      "roadClass": "primary",
+      "total": "7.41 km",
+      "overlap": "86.8 m",
+      "percent": "1.17%"
+    },
+    {
+      "id": "248635227",
+      "roadClass": "tertiary",
+      "total": "2.51 km",
+      "overlap": "20.9 m",
+      "percent": "0.83%"
+    },
+    {
+      "id": "848854997",
+      "roadClass": "unclassified",
+      "total": "4.60 km",
+      "overlap": "26.5 m",
+      "percent": "0.57%"
+    },
+    {
+      "id": "1413242734",
+      "roadClass": "path",
+      "total": "2.71 km",
+      "overlap": "15.5 m",
+      "percent": "0.57%"
+    },
+    {
+      "id": "342027021",
+      "roadClass": "path",
+      "total": "7.34 km",
+      "overlap": "14.9 m",
+      "percent": "0.20%"
+    },
+    {
+      "id": "141325682",
+      "roadClass": "path",
+      "total": "3.91 km",
+      "overlap": "7.6 m",
+      "percent": "0.19%"
+    },
+    {
+      "id": "340628985",
+      "roadClass": "path",
+      "total": "2.16 km",
+      "overlap": "0.2 m",
+      "percent": "0.01%"
+    }
+  ],
+  "settlementConnectivity": [
+    {
+      "settlement": "ग्रे",
+      "status": "BASELINE_UNREACHABLE",
+      "baseline": "0.00 km",
+      "scenario": "0.00 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "隆姆康巴",
+      "status": "BASELINE_UNREACHABLE",
+      "baseline": "0.00 km",
+      "scenario": "0.00 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "帮锦",
+      "status": "BASELINE_UNREACHABLE",
+      "baseline": "0.00 km",
+      "scenario": "0.00 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "贡布",
+      "status": "BASELINE_UNREACHABLE",
+      "baseline": "0.00 km",
+      "scenario": "0.00 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "吉草",
+      "status": "BASELINE_UNREACHABLE",
+      "baseline": "0.00 km",
+      "scenario": "0.00 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "पाङलिङ",
+      "status": "BASELINE_UNREACHABLE",
+      "baseline": "0.00 km",
+      "scenario": "0.00 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "Unnamed settlement",
+      "status": "BASELINE_UNREACHABLE",
+      "baseline": "0.00 km",
+      "scenario": "0.00 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "曲松多",
+      "status": "BASELINE_UNREACHABLE",
+      "baseline": "0.00 km",
+      "scenario": "0.00 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "रसुवागढी",
+      "status": "CUT_OFF",
+      "baseline": "21.89 km",
+      "scenario": "0.00 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "सिङ्ग्दुम",
+      "status": "CUT_OFF",
+      "baseline": "27.46 km",
+      "scenario": "0.00 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "色琼村",
+      "status": "CUT_OFF",
+      "baseline": "34.69 km",
+      "scenario": "0.00 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "टिमुरे",
+      "status": "CUT_OFF",
+      "baseline": "18.82 km",
+      "scenario": "0.00 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "तातोपानी",
+      "status": "CUT_OFF",
+      "baseline": "20.68 km",
+      "scenario": "0.00 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "सानाे भार्खु",
+      "status": "CUT_OFF",
+      "baseline": "3.21 km",
+      "scenario": "0.00 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "热索",
+      "status": "CUT_OFF",
+      "baseline": "22.24 km",
+      "scenario": "0.00 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "क्याङजिन गोँपा",
+      "status": "CUT_OFF",
+      "baseline": "31.92 km",
+      "scenario": "0.00 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "江村",
+      "status": "CUT_OFF",
+      "baseline": "32.29 km",
+      "scenario": "0.00 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "ठुलो भार्खु",
+      "status": "CUT_OFF",
+      "baseline": "4.41 km",
+      "scenario": "0.00 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "本波",
+      "status": "CUT_OFF",
+      "baseline": "37.48 km",
+      "scenario": "0.00 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "拉比村",
+      "status": "CUT_OFF",
+      "baseline": "31.91 km",
+      "scenario": "0.00 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "चिलिमे",
+      "status": "LONGER_ROUTE",
+      "baseline": "15.17 km",
+      "scenario": "20.39 km",
+      "delta": "5.22 km"
+    },
+    {
+      "settlement": "Unnamed settlement",
+      "status": "LONGER_ROUTE",
+      "baseline": "20.33 km",
+      "scenario": "23.99 km",
+      "delta": "3.66 km"
+    },
+    {
+      "settlement": "तेटाङचेट",
+      "status": "LONGER_ROUTE",
+      "baseline": "22.22 km",
+      "scenario": "25.88 km",
+      "delta": "3.66 km"
+    },
+    {
+      "settlement": "Dalgaun",
+      "status": "LONGER_ROUTE",
+      "baseline": "19.76 km",
+      "scenario": "20.56 km",
+      "delta": "0.80 km"
+    },
+    {
+      "settlement": "डाल्फेडी",
+      "status": "LONGER_ROUTE",
+      "baseline": "18.72 km",
+      "scenario": "19.52 km",
+      "delta": "0.80 km"
+    },
+    {
+      "settlement": "स्याप्रु बेसी",
+      "status": "LONGER_ROUTE",
+      "baseline": "7.38 km",
+      "scenario": "8.15 km",
+      "delta": "0.77 km"
+    },
+    {
+      "settlement": "बाहुनडाँडा",
+      "status": "LONGER_ROUTE",
+      "baseline": "10.57 km",
+      "scenario": "11.20 km",
+      "delta": "0.64 km"
+    },
+    {
+      "settlement": "आमाछोदिङ्मो",
+      "status": "LONGER_ROUTE",
+      "baseline": "13.95 km",
+      "scenario": "14.59 km",
+      "delta": "0.64 km"
+    },
+    {
+      "settlement": "Unnamed settlement",
+      "status": "LONGER_ROUTE",
+      "baseline": "14.83 km",
+      "scenario": "15.47 km",
+      "delta": "0.64 km"
+    },
+    {
+      "settlement": "गोल्जुङ",
+      "status": "LONGER_ROUTE",
+      "baseline": "13.63 km",
+      "scenario": "14.27 km",
+      "delta": "0.64 km"
+    },
+    {
+      "settlement": "गोङ्गाङ",
+      "status": "LONGER_ROUTE",
+      "baseline": "17.78 km",
+      "scenario": "18.34 km",
+      "delta": "0.56 km"
+    },
+    {
+      "settlement": "नागथली",
+      "status": "LONGER_ROUTE",
+      "baseline": "19.11 km",
+      "scenario": "19.11 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "ब्रिमडाङ",
+      "status": "LONGER_ROUTE",
+      "baseline": "18.28 km",
+      "scenario": "18.28 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "लिङलिङ",
+      "status": "LONGER_ROUTE",
+      "baseline": "13.66 km",
+      "scenario": "13.66 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "पाजुङ",
+      "status": "LONGER_ROUTE",
+      "baseline": "13.80 km",
+      "scenario": "13.80 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "Unnamed settlement",
+      "status": "LONGER_ROUTE",
+      "baseline": "16.88 km",
+      "scenario": "16.88 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "भ्रजम",
+      "status": "LONGER_ROUTE",
+      "baseline": "14.98 km",
+      "scenario": "14.98 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "थुमन",
+      "status": "LONGER_ROUTE",
+      "baseline": "15.78 km",
+      "scenario": "15.78 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "दुर्सागाङ",
+      "status": "NO_CHANGE",
+      "baseline": "5.40 km",
+      "scenario": "5.40 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "Pering Kharka",
+      "status": "NO_CHANGE",
+      "baseline": "19.11 km",
+      "scenario": "19.11 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "भञ्ज्याङ",
+      "status": "NO_CHANGE",
+      "baseline": "10.71 km",
+      "scenario": "10.71 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "ठुलो स्याप्रु",
+      "status": "NO_CHANGE",
+      "baseline": "3.86 km",
+      "scenario": "3.86 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "Unnamed settlement",
+      "status": "NO_CHANGE",
+      "baseline": "9.06 km",
+      "scenario": "9.06 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "ब्राबल",
+      "status": "NO_CHANGE",
+      "baseline": "0.49 km",
+      "scenario": "0.49 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "Pasture and Fodder Research Station, Dhunche",
+      "status": "NO_CHANGE",
+      "baseline": "2.60 km",
+      "scenario": "2.60 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "सुर्का",
+      "status": "NO_CHANGE",
+      "baseline": "11.86 km",
+      "scenario": "11.86 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "बृद्‌धिम",
+      "status": "NO_CHANGE",
+      "baseline": "13.61 km",
+      "scenario": "13.61 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "गुम्बा",
+      "status": "NO_CHANGE",
+      "baseline": "24.05 km",
+      "scenario": "24.05 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "शेर्पागाउँ",
+      "status": "NO_CHANGE",
+      "baseline": "15.81 km",
+      "scenario": "15.81 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "खाङजिम",
+      "status": "NO_CHANGE",
+      "baseline": "11.08 km",
+      "scenario": "11.08 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "गोसाइँकुण्ड",
+      "status": "NO_CHANGE",
+      "baseline": "0.52 km",
+      "scenario": "0.52 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "लांगटांग",
+      "status": "NO_CHANGE",
+      "baseline": "25.51 km",
+      "scenario": "25.51 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "चंदन बाडी",
+      "status": "NO_CHANGE",
+      "baseline": "9.92 km",
+      "scenario": "9.92 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "National Rainbow Trout Research Station, Dhunche",
+      "status": "NO_CHANGE",
+      "baseline": "2.24 km",
+      "scenario": "2.24 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "मुण्डु",
+      "status": "NO_CHANGE",
+      "baseline": "26.84 km",
+      "scenario": "26.84 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "धुन्चे",
+      "status": "NO_CHANGE",
+      "baseline": "0.36 km",
+      "scenario": "0.36 km",
+      "delta": "0.00 km"
+    },
+    {
+      "settlement": "थाङ्स्याप",
+      "status": "NO_CHANGE",
+      "baseline": "21.53 km",
+      "scenario": "21.53 km",
+      "delta": "0.00 km"
+    }
+  ],
+  "buildingRecords": [
+    {
+      "id": "341903272",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "345428648",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394121",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342026966",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847869421",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847869351",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711492",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "785047641",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847077491",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "934964424",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249830977",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=hotel, roof:material=tin, building:levels=1, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848269314",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "name=Panorama Guest House, building=hotel, roof:material=concrete, building:levels=3, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394133",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "846897164",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847077522",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394253",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394243",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394226",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "854115783",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342735366",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "source=Bing, building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018515",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340615924",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851367102",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=retail",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711517",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711518",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711544",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851371907",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341831320",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711530",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340615900",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711541",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018636",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342634635",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341116630",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340615912",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711547",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394249",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374904",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851371899",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342026984",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "344279094",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848938550",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1154973122",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1264734482",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes, roof:material=tin, building:levels=1, building:material=stone",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819118",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "name=Hotel View Point, building=hotel, roof:material=concrete, building:levels=3, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1264734483",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes, roof:material=tin, building:levels=1, building:material=tin",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341539659",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848854961",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "886692192",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342026992",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342039402",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342039380",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848854960",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848854951",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341537977",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847869353",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342027003",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "785047629",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "854115788",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340610848",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1154973119",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847077490",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342026960",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853716981",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342039366",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1154973120",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340610841",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340610861",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1252792548",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=home, roof:material=tin, building:levels=1, building:material=wood",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819126",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=hotel, roof:material=tin, building:levels=1, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819150",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "name=Hotel Little Home, building=hotel, roof:material=concrete, building:levels=4, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848854957",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "345428647",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341537471",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "850989313",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342039375",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "850782563",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394194",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342026990",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819119",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "name=Buddha Inn, building=yes, roof:material=concrete, building:levels=3, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819166",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes, roof:material=concrete, building:levels=3, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848938547",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341116636",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711531",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341468011",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819174",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house, roof:material=tin, building:levels=1, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819168",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "name=Kyangjin Gumba Society Nepal, building=office, roof:material=tin, building:levels=2, building:material=stone mud",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848269315",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "name=Sunrise guest house, building=hotel, roof:material=concrete, building:levels=2, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851371898",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374889",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394207",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394238",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394168",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851371904",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711529",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711548",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851367096",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018508",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340624553",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018634",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374892",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374905",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "343867358",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "343867392",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "935146860",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "name=Himalayan Bakery Cafe, building=hotel, roof:material=tin, building:levels=2, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340615915",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340624550",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711532",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018507",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374891",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847869350",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340615907",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394245",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374909",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851371902",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394096",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394228",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340615914",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018518",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018519",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851367091",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342026986",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848854952",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711493",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394222",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851371905",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394110",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018615",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819110",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "name=Summit Guest House, building=hotel, roof:material=concrete, building:levels=4, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "278145584",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes, roof:material=tin, building:levels=1, building:material=stone",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1264734481",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=hotel, roof:material=concrete, building:levels=3, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340624499",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851368434",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018510",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341831339",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340610853",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711520",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851367090",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "344134826",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "886474961",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018560",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851371901",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342039392",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851371848",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851368438",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711538",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018513",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847869376",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342634634",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018640",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341116618",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340624500",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340624548",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "854115786",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "854115794",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "344279099",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340610839",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711522",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711526",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851367093",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711537",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018505",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851368439",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711535",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1154973121",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018561",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819127",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "name=Hotel Evening View, building=hotel, roof:material=concrete, building:levels=3, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819120",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "name=Buddha Guest House, building=hotel, roof:material=tin, building:levels=2, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819108",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=hotel, roof:material=concrete, building:levels=3, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848854966",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341539657",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "846897168",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394111",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1154989036",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "854115787",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1154989033",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "785047636",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "785047631",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342027016",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394259",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394217",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394188",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "854115789",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340610850",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341903280",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341537579",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342039396",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342026987",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819137",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=hotel, roof:material=concrete, building:levels=1, building:material=stone",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819125",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=hotel, roof:material=concrete, building:levels=2, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "278145555",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes, roof:material=tin, building:levels=1, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340610834",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342011968",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848854964",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341539656",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "846897167",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "785047635",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018516",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1154973123",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340615918",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "846897169",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340624538",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340624545",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341116611",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "850782562",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819113",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "source=Bing, building=home, roof:material=concrete, building:levels=3, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848269322",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=home, roof:material=tin, building:levels=1, building:material=stone",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "344279065",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394131",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394117",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374893",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374910",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851371908",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341831318",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342039405",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341116635",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711524",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018504",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340624524",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394234",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341831326",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "343867364",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1154973117",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848854956",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341903295",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341539658",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341538419",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394255",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394198",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394094",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711521",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1390896614",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851367095",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711542",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "846897152",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "934964422",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340624536",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847869355",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819159",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=home, roof:material=stone, building:levels=1, building:material=tin",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819176",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=home, roof:material=tin, building:levels=1, building:material=tin",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249791830",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house, roof:material=tin, building:levels=1, building:material=stone",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374901",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851371903",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851375156",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851371850",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "785047640",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847077527",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "785047634",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "249485785",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "name=Mendo Family Homestay, source=Bing, building=hotel, roof:material=tin, building:levels=2, building:material=stone concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "846897165",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819115",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes, roof:material=tin, building:levels=1, building:material=stone",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819165",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes, roof:material=tin, building:levels=2, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "278145545",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=home, roof:material=tin, building:levels=1, building:material=tin",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819086",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=monastery, roof:material=concrete, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341116623",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018517",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249839802",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house, roof:material=tin, building:levels=1, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711549",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340624508",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711519",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "886474959",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "344134849",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848854962",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394265",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847869420",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "886696750",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341468009",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394152",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394258",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "344279062",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851371906",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340610849",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "277793956",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "name=Snow Leopard Hotel & Lodge, source=Bing, tourism=hostel, building=hotel, roof:material=tin, building:levels=1, building:material=stone & mud",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "278145549",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "source=Bing, building=home, roof:material=tin, building:levels=1, building:material=stone & mud",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341539654",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394139",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342026977",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341468013",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1154989034",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341116628",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1154973118",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340610847",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342039374",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848854970",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "345428645",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "343867338",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851371851",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394135",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342039389",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853616648",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847077526",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847869352",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342027019",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853616647",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819121",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes, roof:material=tin, building:levels=1, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819124",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes, roof:material=tin, building:levels=1, building:material=stone",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249830976",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=hotel, roof:material=tin, building:levels=4, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819111",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "name=Higher Guest House, building=hotel, roof:material=concrete, building:levels=4, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341539660",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848854948",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341116613",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851368442",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341116631",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341933036",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "344279101",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374896",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394211",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341831305",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342039364",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711525",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851369398",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340615916",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851367094",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851369399",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=apartments",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711534",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "277978425",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "source=Bing, building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341116634",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341116621",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341915998",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374894",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341831255",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394100",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711516",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340624535",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340615919",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851367107",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711546",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "344134851",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851368425",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711550",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342026975",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342027014",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851371909",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851371911",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340624512",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851368431",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340624546",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851367104",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851368440",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "966745826",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341116626",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341116619",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341831323",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341831338",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "343867341",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "785047632",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "785047638",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "934964421",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340624549",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340624516",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340610860",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340615920",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851367092",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851368443",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711533",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711536",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "344134830",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341116614",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018502",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018503",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "850782566",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851371846",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848854947",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848854953",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342027008",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340615902",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340615904",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "277978410",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "source=Bing, building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851368424",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394102",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394192",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851367103",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=retail",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341116622",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851368441",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711545",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "344279074",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "344279085",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "541982164",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342735368",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "source=Bing, building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "204837687",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "name=Kyangjin Gumba Souvenir Shop, building=hotel, roof:material=tin, building:levels=2, building:material=stone",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819092",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=hotel, roof:material=concrete, building:levels=3, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848854965",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848854959",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341538649",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "785047637",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847077528",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341537646",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848854950",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374916",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394104",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249830978",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=home, roof:material=tin, building:levels=1, building:material=tin",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819116",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "name=Hotel Little Home, building=hotel, roof:material=tin, building:levels=1, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819152",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "name=Moon Light Guest House, building=hotel, roof:material=concrete, building:levels=3, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340610828",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341022954",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "note=I'm not sure these are buildings, but they certainly look man-made. Maybe alpine huts?, building=hut",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848854949",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "846897166",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342039386",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847077521",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847077523",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1154989037",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341116629",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340624533",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341558554",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "277978442",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "source=Bing, building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018506",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851368428",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018618",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "850782565",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374897",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374902",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "343867389",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340615917",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341116624",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340624557",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394270",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851375157",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340610857",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848854955",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848854958",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342026991",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "846897151",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "846897171",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394251",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847077525",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819169",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=home, roof:material=tin, building:levels=3, building:material=stone",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "934964420",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342634636",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851368433",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711540",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847869349",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340624537",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018638",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374885",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394173",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851371912",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341116620",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851367105",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711523",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "277978405",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "source=Bing, building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018635",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018512",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851369400",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374887",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374888",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853760549",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851371847",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711527",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711551",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340624555",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018520",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "846902591",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851368427",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018629",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374899",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374900",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394108",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374895",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342027004",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848938549",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340610840",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340610858",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342039377",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "850989314",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819095",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "name=Snow Leopard Hotel & Lodge, building=hotel, roof:material=tin, building:levels=1, building:material=stone",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819096",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=home, roof:material=tin, building:levels=2, building:material=stone mud",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "846900226",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=home, roof:material=tin, building:levels=1, building:material=stone",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341537349",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374898",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374903",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394272",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394203",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851371849",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "785047630",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394230",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "785047642",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847077524",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "785047633",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "278145547",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=hotel, roof:material=concrete, building:levels=3, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249839801",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "name=Namaste Guest House, building=hotel, roof:material=concrete, building:levels=3, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "249485789",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "name=Snow Leopard Hotel & Lodge, source=Bing, building=home, roof:material=tin, building:levels=1, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "345428646",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "854115491",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374890",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851368430",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851367108",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851369397",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=apartments",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018511",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851367089",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851369404",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "344279089",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394247",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "344279071",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018514",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848854963",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "848854954",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394115",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342026999",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394232",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394215",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "854115790",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "278145532",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=hotel, roof:material=concrete, building:levels=3, building:material=concrete",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "1249819173",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=home, roof:material=tin, building:levels=1, building:material=tin",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "934964423",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851367106",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340624547",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340624502",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374907",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851371900",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "342039383",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340615913",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340624554",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711543",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341116625",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847018509",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "846902592",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851368426",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "847869354",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341394236",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374906",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374908",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851371910",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851375158",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711528",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "340624503",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "853711539",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "851374911",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "937414831",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=yes",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    },
+    {
+      "id": "341831341",
+      "osmType": "way",
+      "geometryType": "Polygon",
+      "attributes": "building=house",
+      "clippedToCorridor": false,
+      "classification": "DRAINAGE_CORRIDOR_EXPOSED"
+    }
+  ],
+  "bridgeRecords": []
+}
